@@ -1,5 +1,12 @@
 UPDATES:
 
+07.05.22
+
+In case the Telegram script stops showing the daily overview.
+You need to delete the hermesTest.txt in the subfolder telegram_notification_buffer it will be created afresh on the next execution.
+type logged in: cd telegram_notification_buffer
+after that: rm hermesTest.txt
+
 04.03.22
 
 Diskspace script - Telegram Notification
