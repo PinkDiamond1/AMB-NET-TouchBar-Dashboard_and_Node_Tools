@@ -1,4 +1,4 @@
-#Amb-Net Telegram Notification v3.4 2022March1
+#Amb-Net Telegram Notification v3.5 2022mai10
 #Enter your Settings here:
 #------------------------------------------------------------
 
@@ -10,18 +10,19 @@ home = '/root/'
 Telegram_Token = ''
 Telegram_Chat_ID = ''
 
-#enter your atlas node(s) in the brackets, separated by comma and surrounded by inverted commas like this ['0x21...','0x35...','0x64...']
+#enter your atlas node(s) in the brackets, seperated by comma and surrounded by inverted commas like this ['0x21...','0x35...','0x64...']
+#atlasnodes = ['','']
 atlasnodes = []
 
-#enter your apollo node(s) in the brackets, separated by comma and surrounded by inverted commas like this ['0x21...','0x35...','0x64...']
+#enter your apollo node(s) in the brackets, seperated by comma and surrounded by inverted commas like this ['0x21...','0x35...','0x64...']
 apollonodes = []
 
 
 #Send daily status message? (1 = yes, 0 = no)
 statusmessage = '1'
-#Set (server)time when to send daily status message
+#Set (server)time when to send daily stats message
 statstime = '1505'
-#show rewards in currency of choice? For Atlas, amount of AMB and currency are shown. This has to be split into 13 Payouts. (1 = yes, 0 = no)
+#show rewards in currency of choice? For Atlas amount of AMB and currency are shown. This has to be split into 13 Payouts. (1 = yes, 0 = no)
 calculateFiat = '1'
 #currency to write price into the daily status message (for example EUR, CAD, CHF, CNY, RUB, JPY, for available conversions check: https://www.coingecko.com/)
 currency = 'USD'
@@ -34,11 +35,12 @@ hideTestnet = '0'
 
 
 #to set Bundle Warnings, enter as many values as you'd like to be notified at, seperated by comma and surrounded by inverted commas like this ['100','200','1000']
-dailybundlewarnings = ['60','100','125','150','200','300','400','500','600','700','800','900','1000','5000']
+dailybundlewarnings = ['60','100','125','150','200','300','400','500','1000','5000']
 
 #once a daily-bundles value has triggered a warning, how much lower does the value need to go, until it can be triggered again?
 #without this mechanism, notifications would be sent repeatedly, if you get too many Bundle Warnings, raise the following value:
 sensitivity = '10'
+
 
 #cryptonomics - only change if cryptonomics change
 bundlecostusd = 8
@@ -62,6 +64,11 @@ import os.path
 from time import localtime, strftime
 import datetime
 from decimal import Decimal,ROUND_HALF_UP
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-t", "--telegram_update", help="This option sends the telegram update.", action="store_true")
+args = parser.parse_args()
 
 nodeOffline = '\U0001f6a8'
 nodeOnline = '\u2705'
@@ -650,7 +657,7 @@ if trig == "1":
     f.close()
 
 #Daily Overview and network statistics
-if time == statstime:    
+if time == statstime or args.telegram_update: 
         baldifallapollo = 0
         baldifapollo = []
         apollostring = ""
@@ -768,7 +775,7 @@ if time == statstime:
                                 celeb = '\U0001F451'
                             name = hermesNames[countherm].split('//')      
                             string = (string+"\n<a href=\"https://explorer.ambrosus.io/address/"+hermesAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)
-                countherm = countherm + 1
+            countherm = countherm + 1
             count = count + 1
 
         #overwrite hermes buffer
@@ -817,26 +824,42 @@ if time == statstime:
             hermesTestList = []
             hermesTestAddressList = []
             switchHeadline = 0
-            for each in hermesTest:
-                hermesTest[count] = (hermesTest[count].replace("\n", ""))
-                countherm = 0
-                for info in hermesTestNames:
-                    if hermesTest[count] == hermesTestNames[countherm]:
-                        if hideHeartbeat == "1":
-                            if hermesTest[count] == "https://hermes0.ambrosus-test.io/nodeinfo":
-                                print("Ignoring Heartbeat Test-Hermes 0")
-                            elif hermesTest[count] == "https://hermes1.ambrosus-test.io/nodeinfo":
-                                print("Ignoring Heartbeat Test-Hermes 1")
-                            elif hermesTest[count] == "test-nop.ambrosus-test.com":
-                                print("Ignoring Nop-Test-Hermes")
-                            #elif hermesTest[count] == "internal-test.ambrosus-test.io":
-                            #    print("Ignoring Heartbeat Internal-Test-Hermes 2")
+            if len(hermesTestNames) > 0:
+                for each in hermesTest:
+                    hermesTest[count] = (hermesTest[count].replace("\n", ""))
+                    countherm = 0
+                    for info in hermesTestNames:   
+                        if hermesTest[count] == hermesTestNames[countherm]:
+                            if hideHeartbeat == "1":
+                                if hermesTest[count] == "https://hermes0.ambrosus-test.io/nodeinfo":
+                                    print("Ignoring Heartbeat Test-Hermes 0")
+                                elif hermesTest[count] == "https://hermes1.ambrosus-test.io/nodeinfo":
+                                    print("Ignoring Heartbeat Test-Hermes 1")
+                                elif hermesTest[count] == "test-nop.ambrosus-test.com":
+                                    print("Ignoring Nop-Test-Hermes")
+                                #elif hermesTest[count] == "internal-test.ambrosus-test.io":
+                                #    print("Ignoring Heartbeat Internal-Test-Hermes 2")
+                                else:
+                                    counta = count + 1
+                                    diff = int(hermesTestBundles[countherm]) - int(hermesTest[counta])
+                                    if int(diff) > 0:
+                                        if switchHeadline == 0:
+                                            string = (string+"\n\nTEST-NET Hermes:")
+                                            switchHeadline = 1
+                                        celeb = ''
+                                        if int(diff) >= 1 and int(diff) <= 4:
+                                            celeb = '\U0001F331'
+                                        elif int(diff) >= 5:    
+                                            celeb = '\U0001F441'
+                                        name = hermesTestNames[countherm].split('//')
+                                        print(countherm)
+                                        string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)  
                             else:
                                 counta = count + 1
                                 diff = int(hermesTestBundles[countherm]) - int(hermesTest[counta])
                                 if int(diff) > 0:
                                     if switchHeadline == 0:
-                                        string = (string+"\n\nTEST-NET Hermes:")
+                                        string = (string+"\n\nTEST-NET Hermes:") 
                                         switchHeadline = 1
                                     celeb = ''
                                     if int(diff) >= 1 and int(diff) <= 4:
@@ -844,27 +867,14 @@ if time == statstime:
                                     elif int(diff) >= 5:    
                                         celeb = '\U0001F441'
                                     name = hermesTestNames[countherm].split('//')      
-                                    string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)  
-                        else:
-                            counta = count + 1
-                            diff = int(hermesTestBundles[countherm]) - int(hermesTest[counta])
-                            if int(diff) > 0:
-                                if switchHeadline == 0:
-                                    string = (string+"\n\nTEST-NET Hermes:") 
-                                    switchHeadline = 1
-                                celeb = ''
-                                if int(diff) >= 1 and int(diff) <= 4:
-                                    celeb = '\U0001F331'
-                                elif int(diff) >= 5:    
-                                    celeb = '\U0001F441'
-                                name = hermesTestNames[countherm].split('//')      
-                                string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)
+                                    string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)
+                                                       
                     countherm = countherm + 1
-                count = count + 1
-        if coingeckoError != "":
-            string = (string+"\n\n"+coingeckoError)    
-        if HermesError != "":
-            string = (string+"\n\n"+HermesError)
+                    count = count + 1
+            if coingeckoError != "":
+                string = (string+"\n\n"+coingeckoError)    
+            if HermesError != "":
+                string = (string+"\n\n"+HermesError)
 
         #overwrite hermesTest buffer
         f = open(home+folder+"hermesTest.txt","w")
