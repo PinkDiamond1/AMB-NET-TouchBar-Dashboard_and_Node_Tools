@@ -1,5 +1,17 @@
 UPDATES:
 
+
+10.05.22
+
+Telegram Notification 3.5
+
+There was a tab error in the Telegram Notification script that only comes up on certain cases that have not happened before.
+It has been corrected in version 3.5. An additional idea that has been implemented by J is a flag function. 
+If you run the script with the flag -t at the end (python3 telegram_notification.py -t) 
+it will send the daily overview telegram message, whatever the time is. This is great for testing the setup. Thanks J!
+
+Easiest way to update: Exchange the script from line 58 downwards.
+
 07.05.22
 
 In case the Telegram script stops showing the daily overview.
