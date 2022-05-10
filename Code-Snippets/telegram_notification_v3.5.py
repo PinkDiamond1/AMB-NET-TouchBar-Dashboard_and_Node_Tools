@@ -58,6 +58,7 @@ hermes_test = 'https://explorer-api.ambrosus-test.io/hermeses'
 #---------------------------------------------------------------
 
 
+
 import requests
 import random
 import os.path
@@ -756,8 +757,12 @@ if time == statstime or args.telegram_update:
                                     celeb = '\U0001F386'
                                 elif int(diff) >= 1000:   
                                     celeb = '\U0001F451'
-                                name = hermesNames[countherm].split('//')    
-                                string = (string+"\n<a href=\"https://explorer.ambrosus.io/address/"+hermesAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)  
+                                names = hermesNames[countherm].split('//')
+                                if len(names) == 2:
+                                    name = names[1]
+                                else:
+                                    name = str(names)
+                                string = (string+"\n<a href=\"https://explorer.ambrosus.io/address/"+hermesAddress[countherm]+"\">"+str(name)+"</a>\n"+"New Bundles: "+str(diff)+celeb)  
                     else:
                         counta = count + 1
                         diff = int(hermesBundles[countherm]) - int(hermes[counta])
@@ -773,9 +778,13 @@ if time == statstime or args.telegram_update:
                                 celeb = '\U0001F386'
                             elif int(diff) >= 1000:   
                                 celeb = '\U0001F451'
-                            name = hermesNames[countherm].split('//')      
-                            string = (string+"\n<a href=\"https://explorer.ambrosus.io/address/"+hermesAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)
-            countherm = countherm + 1
+                            names = hermesNames[countherm].split('//')
+                            if len(names) == 2:
+                                name = names[1]
+                            else:
+                                name = str(names)
+                            string = (string+"\n<a href=\"https://explorer.ambrosus.io/address/"+hermesAddress[countherm]+"\">"+str(name)+"</a>\n"+"New Bundles: "+str(diff)+celeb)
+                countherm = countherm + 1
             count = count + 1
 
         #overwrite hermes buffer
@@ -851,9 +860,13 @@ if time == statstime or args.telegram_update:
                                             celeb = '\U0001F331'
                                         elif int(diff) >= 5:    
                                             celeb = '\U0001F441'
-                                        name = hermesTestNames[countherm].split('//')
-                                        print(countherm)
-                                        string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)  
+                                        print(hermesTestNames[4])
+                                        names = hermesTestNames[countherm].split('//')
+                                        if len(names) == 2:
+                                            name = names[1]
+                                        else:
+                                            name = str(names)   
+                                        string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+str(name)+"</a>\n"+"New Bundles: "+str(diff)+celeb)  
                             else:
                                 counta = count + 1
                                 diff = int(hermesTestBundles[countherm]) - int(hermesTest[counta])
@@ -866,10 +879,14 @@ if time == statstime or args.telegram_update:
                                         celeb = '\U0001F331'
                                     elif int(diff) >= 5:    
                                         celeb = '\U0001F441'
-                                    name = hermesTestNames[countherm].split('//')      
-                                    string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+name[1]+"</a>\n"+"New Bundles: "+str(diff)+celeb)
+                                    names = hermesTestNames[countherm].split('//')
+                                    if len(names) == 2:
+                                        name = names[1]
+                                    else:
+                                        name = str(names)
+                                    string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[countherm]+"\">"+str(name)+"</a>\n"+"New Bundles: "+str(diff)+celeb)
                                                        
-                    countherm = countherm + 1
+                        countherm = countherm + 1
                     count = count + 1
             if coingeckoError != "":
                 string = (string+"\n\n"+coingeckoError)    
@@ -908,8 +925,12 @@ if time == statstime or args.telegram_update:
                 count = 0
                 string = (string+"\n\nNew Test-Hermes"+celeb1+":")
                 for each in hermesTestNames:
-                    name = hermesTestNames[count].split('//')  
-                    string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[count]+"\">"+name[1]+"</a>") 
+                    names = hermesTestNames[count].split('//')
+                    if len(names) == 2:
+                        name = names[1]
+                    else:
+                        name = str(names)
+                    string = (string+"\n<a href=\"https://explorer.ambrosus-test.io/address/"+hermesTestAddress[count]+"\">"+str(name)+"</a>") 
                     count = count + 1
             if testHermesError != "":
                 string = (string+"\n\n"+testHermesError)
