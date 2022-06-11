@@ -4,6 +4,8 @@
 
 ### Hello fellow AMB-Net node operators. Welcome to this little repository.
 
+!!! This Repo is no longer maintained as I'm no longer part of the Ambrosus community !!! Nodetools keep working but there is no guarantee for how long.
+
 Here on the Repos main page I present a complete setup that may help you monitor and control your ATLAS or APOLLO node(s) through the MacBook TouchBar.
 
 ### Python Node Tools that make operating a node much easier.
