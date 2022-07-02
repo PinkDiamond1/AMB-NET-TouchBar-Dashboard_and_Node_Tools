@@ -219,11 +219,6 @@ For Atlas nodes there is a solution aswell that automates payout, tracks rewards
 
 [Automate Atlas payout, track rewards and optionally send out funds through Python](https://github.com/inlak16/AMB-NET-TouchBar-Dashboard/wiki/Automate-Atlas-Payout,-track-rewards-and-optionally-send-to-another-account)
 
-### What's next ?
-
-I'm excited to hear about ideas and useful commands that can be implemented and what you are going to customize out of this set of tools. 
-Please feel free to get back to me on Ambrosus slack (inlak16) or in telegram (@marco_2019). 
-I'm planning to keep this repository up to date the way I have time. 
 
 [Here is a link to the Updates that have been done so far](https://github.com/inlak16/AMB-NET-TouchBar-Dashboard/blob/master/UPDATES)
 
